@@ -30,6 +30,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Camera Fov")]
     public float startFov;
     public float sprintFov;
+    public float grappleFov = 95f;
 
     [Header("Calculating velocity")]
     public float calculatedSpeed;
@@ -78,6 +79,7 @@ public class PlayerMovement : MonoBehaviour
     public MovementState state;
     public enum MovementState
     {
+        freeze,
         walking,
         swinging,
         sprinting,
@@ -92,6 +94,8 @@ public class PlayerMovement : MonoBehaviour
     public bool wallrunning;
     public bool dashing;
     public bool swinging;
+    public bool freeze;
+    public bool activeGrapple;
 
     private void Start()
     {
@@ -108,12 +112,11 @@ public class PlayerMovement : MonoBehaviour
         // ground check
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
 
-        MyInput();
-        SpeedControl();
-        StateHandler();
+
+
 
         // handle drag
-        if (state == MovementState.walking || state == MovementState.sprinting || state == MovementState.crouching)
+        if (state == MovementState.walking || state == MovementState.sprinting || state == MovementState.crouching && !activeGrapple)
             rb.linearDamping = groundDrag;
         else
             rb.linearDamping = 0;
@@ -121,7 +124,10 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        MyInput();
         MovePlayer();
+        SpeedControl();
+        StateHandler();
     }
 
     private void MyInput()
@@ -155,7 +161,15 @@ public class PlayerMovement : MonoBehaviour
 
     private void StateHandler()
     {
-        if (swinging)
+        // Mode - Freeze
+        if (freeze)
+        {
+            state = MovementState.freeze;
+            moveSpeed = 0;
+            rb.linearVelocity = Vector3.zero;
+        }
+        // Mode - Swinging
+        else if (swinging)
         {
             state = MovementState.swinging;
             desiredMoveSpeed = swingSpeed;
@@ -304,6 +318,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void MovePlayer()
     {
+        if (activeGrapple) return;
+
         if (Climbing.exitingWall) return;
 
         if (state == MovementState.dashing) return;
@@ -334,6 +350,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void SpeedControl()
     {
+        if (activeGrapple) return;
+
         // limiting speed on slope
         if (OnSlope() && !exitingSlope)
         {
@@ -380,6 +398,48 @@ public class PlayerMovement : MonoBehaviour
         exitingSlope = false;
     }
 
+    private bool enableMovementOnNextTouch;
+
+    public void JumpToPosition(Vector3 targetPosition, float trajectoryHeight)
+    {
+        activeGrapple = true;
+
+        velocityToSet = CalculateJumpVelocity(transform.position, targetPosition, trajectoryHeight);
+
+        Invoke(nameof(SetVelocity), 0.1f);
+
+        Invoke(nameof(ResetRestrictions), 3f);
+    }
+
+    private Vector3 velocityToSet;
+
+    private void SetVelocity()
+    {
+        enableMovementOnNextTouch = true;
+
+        rb.linearVelocity = velocityToSet;
+
+        cam.DoFov(grappleFov, 0.1f);
+    }
+
+    private void ResetRestrictions()
+    {
+        activeGrapple = false;
+        cam.DoFov(startFov, 0.1f);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (enableMovementOnNextTouch)
+        {
+            enableMovementOnNextTouch = false;
+
+            ResetRestrictions();
+
+            GetComponent<Grappling>().StopGrapple();
+        }
+    }
+
     public bool OnSlope()
     {
         if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + 0.3f))
@@ -394,5 +454,21 @@ public class PlayerMovement : MonoBehaviour
     public Vector3 GetSlopeMoveDirection(Vector3 direction)
     {
         return Vector3.ProjectOnPlane(direction, slopeHit.normal).normalized;
+    }
+
+
+    // reference -> https://www.youtube.com/watch?v=IvT8hjy6q4o 
+    // dunno how this works but it does :3
+    public Vector3 CalculateJumpVelocity(Vector3 startPoint, Vector3 endPoint, float trajectoryHeight)
+    {
+        float gravity = Physics.gravity.y;
+        float displacementY = endPoint.y - startPoint.y;
+        Vector3 displacementXZ = new Vector3(endPoint.x - startPoint.x, 0f, endPoint.z - startPoint.z);
+
+        Vector3 velocityY = Vector3.up * Mathf.Sqrt(-2 * gravity * trajectoryHeight);
+        Vector3 velocityXZ = displacementXZ / (Mathf.Sqrt(-2 * trajectoryHeight / gravity)
+            + Mathf.Sqrt(2 * (displacementY - trajectoryHeight) / gravity));
+
+        return velocityXZ + velocityY;
     }
 }

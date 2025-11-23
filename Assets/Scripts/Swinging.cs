@@ -11,7 +11,7 @@ public class Swinging : MonoBehaviour
 
     [Header("Swinging")]
     private Vector3 swingPoint;
-    private float maxDistance = 100f;
+    private float maxDistance = 25f;
     private SpringJoint joint;
     public float spring, damper, massScale;
 
