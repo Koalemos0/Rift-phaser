@@ -25,7 +25,7 @@ public class Grappling : MonoBehaviour
     [Header("Input")]
     public KeyCode grappleKey = KeyCode.Mouse0;
 
-    private bool grappling;
+    public bool grappling;
 
     private void Start()
     {
@@ -82,7 +82,7 @@ public class Grappling : MonoBehaviour
 
         pm.JumpToPosition(grapplePoint, highestPointOnArc);
 
-        Invoke(nameof(StopGrapple), 1f);
+        Invoke(nameof(StopGrapple), 4f);
     }
 
     public void StopGrapple()

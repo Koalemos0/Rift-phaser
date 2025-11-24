@@ -57,7 +57,7 @@ public class Dashing : MonoBehaviour
         pm.dashing = true;
         pm.maxYSpeed = maxDashYSpeed;
 
-        cam.DoFov(dashFov, 0.05f);
+        cam.DoFov(dashFov, 0.1f);
 
         Transform forwardT;
 
@@ -103,7 +103,7 @@ public class Dashing : MonoBehaviour
         pm.dashing = false;
         pm.maxYSpeed = 0f;
 
-        cam.DoFov(85f, 0.05f);
+        cam.DoFov(pm.startFov, 0.2f);
 
         if (disableGravity) 
         {

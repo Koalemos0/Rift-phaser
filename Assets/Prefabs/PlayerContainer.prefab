@@ -289,24 +289,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 929575ccff20dc14ca04a99aeec8f082, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 7
+  walkSpeed: 10
   sprintSpeed: 10
   slideSpeed: 30
   wallRunSpeed: 10
-  dashSpeed: 20
+  dashSpeed: 25
   dashSpeedChangeFactor: 50
   swingSpeed: 15
   maxYSpeed: 0
   speedIncreaseMultiplier: 2
   slopeIncreaseMultiplier: 2
   groundDrag: 5
-  startFov: 85
-  sprintFov: 90
+  startFov: 90
+  sprintFov: 95
   grappleFov: 95
   calculatedSpeed: 0
   jumpForce: 12
   jumpCooldown: 0.25
-  airMultiplier: 0.4
+  airMultiplier: 2
   readyToJump: 0
   crouchSpeed: 4
   crouchYScale: 0.5
@@ -428,11 +428,11 @@ MonoBehaviour:
   cam: {fileID: 8532859358327614879}
   dashForce: 20
   dashUpwardForce: 0
-  dashDuration: 0.25
+  dashDuration: 0.3
   maxDashYSpeed: 15
-  dashFov: 95
+  dashFov: 100
   useCameraForward: 1
-  allowAllDirections: 1
+  allowAllDirections: 0
   disableGravity: 1
   resetVel: 0
   dashCd: 0
@@ -482,8 +482,8 @@ MonoBehaviour:
   lr: {fileID: 1750083769438074191}
   maxGrappleDistance: 25
   grappleDelayTime: 0
-  overshootYAxis: 4
-  grapplingCd: 1
+  overshootYAxis: 1
+  grapplingCd: 0.1
   grappleKey: 323
 --- !u!120 &1081085770162131196
 LineRenderer:

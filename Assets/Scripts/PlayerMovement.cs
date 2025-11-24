@@ -1,7 +1,6 @@
 using System.Collections;
 using UnityEngine;
 using TMPro;
-using UnityEditor.Rendering;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -29,8 +28,9 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Camera Fov")]
     public float startFov;
-    public float sprintFov;
-    public float grappleFov = 95f;
+    public float grappleFov;
+    public float crouchFov;
+    public float slideFov;
 
     [Header("Calculating velocity")]
     public float calculatedSpeed;
@@ -48,7 +48,6 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Keybinds")]
     public KeyCode jumpKey = KeyCode.Space;
-    public KeyCode sprintKey = KeyCode.LeftShift;
     public KeyCode crouchKey = KeyCode.LeftControl;
 
     [Header("Ground Check")]
@@ -82,7 +81,6 @@ public class PlayerMovement : MonoBehaviour
         freeze,
         walking,
         swinging,
-        sprinting,
         wallrunning,
         crouching,
         dashing,
@@ -112,11 +110,10 @@ public class PlayerMovement : MonoBehaviour
         // ground check
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
 
-
-
+        calculatedSpeed = Vector3.Magnitude(rb.linearVelocity);
 
         // handle drag
-        if (state == MovementState.walking || state == MovementState.sprinting || state == MovementState.crouching && !activeGrapple)
+        if (state == MovementState.walking || state == MovementState.crouching && !activeGrapple)
             rb.linearDamping = groundDrag;
         else
             rb.linearDamping = 0;
@@ -196,32 +193,26 @@ public class PlayerMovement : MonoBehaviour
 
             if (OnSlope() && rb.linearVelocity.y < 0.1f)
                 desiredMoveSpeed = slideSpeed;
-
             else
                 desiredMoveSpeed = sprintSpeed;
+
+            cam.DoFov(slideFov, 0.15f);
+
         }
         // Mode - Crouching
         else if (Input.GetKey(crouchKey))
         {
             state = MovementState.crouching;
             desiredMoveSpeed = crouchSpeed;
+            cam.DoFov(crouchFov, 0.15f);
         }
-
-        // Mode - Sprinting
-        else if (grounded && Input.GetKey(sprintKey))
-        {
-            state = MovementState.sprinting;
-            desiredMoveSpeed = sprintSpeed;
-            cam.DoFov(sprintFov, 0.15f);
-        }
-
         // Mode - Walking
         else if (grounded)
         {
             state = MovementState.walking;
             desiredMoveSpeed = walkSpeed;
+            cam.DoFov(startFov, 0.15f);
         }
-
         // Mode - Air
         else
         {
@@ -232,12 +223,6 @@ public class PlayerMovement : MonoBehaviour
             else
                 desiredMoveSpeed = sprintSpeed;
         }
-
-        if (!Input.GetKey(sprintKey))
-        {
-            cam.DoFov(startFov, 0.15f);
-        }
-
         //lerp after dash
         bool desiredMoveSpeedHasChanged = desiredMoveSpeed != lastDesiredMoveSpeed;
 
@@ -372,15 +357,8 @@ public class PlayerMovement : MonoBehaviour
             }
 
             //HERE DO NOT FORGET OK? OK
-            text_speed.SetText("Speed: " + Mathf.Round(flatVel.magnitude));
+            text_speed.SetText("Speed: " + Mathf.Round(calculatedSpeed));
         }
-        
-        //limit y vel
-        if(maxYSpeed != 0 && rb.linearVelocity.y > maxYSpeed)
-        {
-            rb.linearVelocity = new Vector3(rb.linearVelocity.x, maxYSpeed, rb.linearVelocity.z);
-        } 
-
     }
     private void Jump()
     {
