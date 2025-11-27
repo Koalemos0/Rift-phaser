@@ -9991,55 +9991,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 725108945562297851, guid: 01222bd566d30074e8d52b3d390a4c1d,
-        type: 3}
-      propertyPath: dashCd
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 725108945562297851, guid: 01222bd566d30074e8d52b3d390a4c1d,
-        type: 3}
-      propertyPath: dashForce
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 725108945562297851, guid: 01222bd566d30074e8d52b3d390a4c1d,
-        type: 3}
-      propertyPath: maxDashYSpeed
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 725108945562297851, guid: 01222bd566d30074e8d52b3d390a4c1d,
-        type: 3}
-      propertyPath: useCameraForward
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 725108945562297851, guid: 01222bd566d30074e8d52b3d390a4c1d,
-        type: 3}
-      propertyPath: allowAllDirections
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1010034052149212655, guid: 01222bd566d30074e8d52b3d390a4c1d,
         type: 3}
       propertyPath: m_Name
       value: PlayerContainer
-      objectReference: {fileID: 0}
-    - target: {fileID: 1909865465976075812, guid: 01222bd566d30074e8d52b3d390a4c1d,
-        type: 3}
-      propertyPath: field of view
-      value: 90
-      objectReference: {fileID: 0}
-    - target: {fileID: 4648473548599007942, guid: 01222bd566d30074e8d52b3d390a4c1d,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5091000811293864137, guid: 01222bd566d30074e8d52b3d390a4c1d,
-        type: 3}
-      propertyPath: overshootYAxis
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5508263668782776296, guid: 01222bd566d30074e8d52b3d390a4c1d,
-        type: 3}
-      propertyPath: climbSpeed
-      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5873549732380691417, guid: 01222bd566d30074e8d52b3d390a4c1d,
         type: 3}
@@ -10098,24 +10053,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8825823368236990215, guid: 01222bd566d30074e8d52b3d390a4c1d,
         type: 3}
-      propertyPath: slideFov
-      value: 95
-      objectReference: {fileID: 0}
-    - target: {fileID: 8825823368236990215, guid: 01222bd566d30074e8d52b3d390a4c1d,
-        type: 3}
-      propertyPath: crouchFov
-      value: 85
-      objectReference: {fileID: 0}
-    - target: {fileID: 8825823368236990215, guid: 01222bd566d30074e8d52b3d390a4c1d,
-        type: 3}
       propertyPath: text_speed
       value: 
       objectReference: {fileID: 1448418731}
-    - target: {fileID: 8825823368236990215, guid: 01222bd566d30074e8d52b3d390a4c1d,
-        type: 3}
-      propertyPath: crouchSpeed
-      value: 8
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

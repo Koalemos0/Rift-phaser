@@ -224,6 +224,7 @@ GameObject:
   - component: {fileID: 725108945562297851}
   - component: {fileID: 5873549732380691417}
   - component: {fileID: 5091000811293864137}
+  - component: {fileID: 587604493598909662}
   - component: {fileID: 1081085770162131196}
   m_Layer: 6
   m_Name: Player
@@ -300,18 +301,21 @@ MonoBehaviour:
   speedIncreaseMultiplier: 2
   slopeIncreaseMultiplier: 2
   groundDrag: 5
+  desiredVector: {x: 0, y: 0, z: 0}
+  smoothTime: 3
   startFov: 90
-  sprintFov: 95
   grappleFov: 95
+  crouchFov: 85
+  slideFov: 95
+  dashFov: 100
   calculatedSpeed: 0
   jumpForce: 12
   jumpCooldown: 0.25
-  airMultiplier: 2
+  airMultiplier: 1
   readyToJump: 0
-  crouchSpeed: 4
+  crouchSpeed: 8
   crouchYScale: 0.5
   jumpKey: 32
-  sprintKey: 304
   crouchKey: 99
   playerHeight: 2
   whatIsGround:
@@ -330,6 +334,7 @@ MonoBehaviour:
   swinging: 0
   freeze: 0
   activeGrapple: 0
+  groundSlam: 0
 --- !u!114 &7247122758090043669
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -344,9 +349,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Sliding
   orientation: {fileID: 5255998395034986725}
   playerObj: {fileID: 1781275601611189231}
-  maxSlideTime: 0.75
+  maxSlideTime: 0
   slideForce: 300
   slideYScale: 0.5
+  inputDirection: {x: 0, y: 0, z: 0}
   slideKey: 306
 --- !u!114 &7651354453984466157
 MonoBehaviour:
@@ -404,7 +410,7 @@ MonoBehaviour:
   climbingUpForce: 14
   climbJumpBackForce: 12
   jumpKey: 32
-  climbJumps: 1
+  climbJumps: 2
   detectionLength: 0.7
   sphereCastRadius: 0.25
   maxWallLookAngle: 35
@@ -426,16 +432,15 @@ MonoBehaviour:
   orientation: {fileID: 5255998395034986725}
   playerCam: {fileID: 4648473548599007942}
   cam: {fileID: 8532859358327614879}
-  dashForce: 20
+  dashForce: 15
   dashUpwardForce: 0
   dashDuration: 0.3
   maxDashYSpeed: 15
-  dashFov: 100
-  useCameraForward: 1
-  allowAllDirections: 0
+  useCameraForward: 0
+  allowAllDirections: 1
   disableGravity: 1
   resetVel: 0
-  dashCd: 0
+  dashCd: 1
   dashKey: 101
 --- !u!114 &5873549732380691417
 MonoBehaviour:
@@ -482,9 +487,28 @@ MonoBehaviour:
   lr: {fileID: 1750083769438074191}
   maxGrappleDistance: 25
   grappleDelayTime: 0
-  overshootYAxis: 1
-  grapplingCd: 0.1
+  overshootYAxis: 0.5
+  grapplingCd: 1
   grappleKey: 323
+  grappling: 0
+--- !u!114 &587604493598909662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2376386873946660664}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78bf9fa5c1a2e3542955e1422330adc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GroundSlam
+  playerObj: {fileID: 3847906104637779888}
+  slamStrength: 150
+  slamWasStarted: 0
+  minDistance: 4
+  slamDelayTime: 0.05
+  groundSlamKey: 306
 --- !u!120 &1081085770162131196
 LineRenderer:
   serializedVersion: 2
@@ -736,7 +760,7 @@ Transform:
   m_GameObject: {fileID: 5026422501455795213}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.1, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -776,7 +800,7 @@ Camera:
     height: 1
   near clip plane: 0.01
   far clip plane: 1000
-  field of view: 85
+  field of view: 90
   orthographic: 0
   orthographic size: 5
   m_Depth: 0

@@ -7,6 +7,7 @@ public class Sliding : MonoBehaviour
     public Transform playerObj;
     private Rigidbody rb;
     private PlayerMovement pm;
+    private Grappling grappling;
 
     [Header("Sliding")]
     public float maxSlideTime;
@@ -15,6 +16,10 @@ public class Sliding : MonoBehaviour
 
     public float slideYScale;
     private float startYScale;
+
+    private bool enableSlideOnNextTouch;
+
+    public Vector3 inputDirection;
 
     [Header("Input")]
     public KeyCode slideKey = KeyCode.LeftControl;
@@ -26,6 +31,7 @@ public class Sliding : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         pm = GetComponent<PlayerMovement>();
+        grappling = GetComponent<Grappling>();
 
         startYScale = playerObj.localScale.y;
     }
@@ -35,17 +41,41 @@ public class Sliding : MonoBehaviour
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
 
-        if (Input.GetKeyDown(slideKey) && (horizontalInput != 0 || verticalInput != 0) && pm.grounded)
+        if (Input.GetKeyDown(slideKey) && pm.grounded)
             StartSlide();
-
-        if (Input.GetKeyUp(slideKey) && pm.sliding)
+        if (Input.GetKeyDown(slideKey) && !pm.grounded)
+            StartLateSlide();
+        if (Input.GetKeyUp(slideKey) && pm.sliding || Input.GetKeyDown(grappling.grappleKey) || (horizontalInput == 0 && verticalInput == 0))
             StopSlide();
     }
 
     private void FixedUpdate()
     {
         if (pm.sliding)
+        {
             SlidingMovement();
+        }
+    }
+
+    private void GetSlideDirection()
+    {
+        inputDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
+    }
+
+    //late slide is when slide input pressed while not grounded => start slide on next collision with ground
+    private void StartLateSlide()
+    {
+        enableSlideOnNextTouch = true;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (enableSlideOnNextTouch)
+        {
+            enableSlideOnNextTouch = false;
+
+            StartSlide();
+        }
     }
 
     private void StartSlide()
@@ -56,11 +86,15 @@ public class Sliding : MonoBehaviour
         rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
 
         slideTimer = maxSlideTime;
+
+        //comment this if slide should not be staight
+        //GetSlideDirection();
     }
 
     private void SlidingMovement()
     {
-        Vector3 inputDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
+        //comment this if slide should be straight
+        GetSlideDirection();
 
         // sliding normal
         if (!pm.OnSlope() || rb.linearVelocity.y > -0.1f)
@@ -76,7 +110,7 @@ public class Sliding : MonoBehaviour
             rb.AddForce(pm.GetSlopeMoveDirection(inputDirection) * slideForce, ForceMode.Force);
         }
 
-        if (slideTimer <= 0)
+        if (slideTimer <= 0 && maxSlideTime != 0)
             StopSlide();
     }
 
@@ -84,6 +118,7 @@ public class Sliding : MonoBehaviour
     {
         pm.sliding = false;
 
+        //revert player model to normal scale
         playerObj.localScale = new Vector3(playerObj.localScale.x, startYScale, playerObj.localScale.z);
     }
 }

@@ -26,11 +26,16 @@ public class PlayerMovement : MonoBehaviour
 
     public float groundDrag;
 
+    public Vector3 desiredVector;
+
+    public float smoothTime;
+
     [Header("Camera Fov")]
     public float startFov;
     public float grappleFov;
     public float crouchFov;
     public float slideFov;
+    public float dashFov;
 
     [Header("Calculating velocity")]
     public float calculatedSpeed;
@@ -39,7 +44,7 @@ public class PlayerMovement : MonoBehaviour
     public float jumpForce;
     public float jumpCooldown;
     public float airMultiplier;
-    public bool readyToJump ;
+    public bool readyToJump;
 
     [Header("Crouching")]
     public float crouchSpeed;
@@ -79,6 +84,7 @@ public class PlayerMovement : MonoBehaviour
     public enum MovementState
     {
         freeze,
+        groundSlam,
         walking,
         swinging,
         wallrunning,
@@ -94,6 +100,7 @@ public class PlayerMovement : MonoBehaviour
     public bool swinging;
     public bool freeze;
     public bool activeGrapple;
+    public bool groundSlam;
 
     private void Start()
     {
@@ -158,8 +165,14 @@ public class PlayerMovement : MonoBehaviour
 
     private void StateHandler()
     {
+        // Mode - Ground Slam
+        if (groundSlam)
+        {
+            state = MovementState.groundSlam;
+            desiredMoveSpeed = 0;
+        }
         // Mode - Freeze
-        if (freeze)
+        else if (freeze)
         {
             state = MovementState.freeze;
             moveSpeed = 0;
@@ -177,6 +190,7 @@ public class PlayerMovement : MonoBehaviour
             state = MovementState.dashing;
             desiredMoveSpeed = dashSpeed;
             speedChangeFactor = dashSpeedChangeFactor;
+            cam.DoFov(dashFov, 0.1f);
         }
 
         // Mode - Wallrunning
@@ -223,6 +237,7 @@ public class PlayerMovement : MonoBehaviour
             else
                 desiredMoveSpeed = sprintSpeed;
         }
+
         //lerp after dash
         bool desiredMoveSpeedHasChanged = desiredMoveSpeed != lastDesiredMoveSpeed;
 
@@ -303,6 +318,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void MovePlayer()
     {
+        if (groundSlam) return;
+
         if (activeGrapple) return;
 
         if (Climbing.exitingWall) return;
@@ -354,6 +371,9 @@ public class PlayerMovement : MonoBehaviour
             {
                 Vector3 limitedVel = flatVel.normalized * moveSpeed;
                 rb.linearVelocity = new Vector3(limitedVel.x, rb.linearVelocity.y, limitedVel.z);
+                //this shit broken af with dash gotta fix it 
+                //desiredVector = new Vector3(limitedVel.x, rb.linearVelocity.y, limitedVel.z);
+                //rb.linearVelocity = Vector3.Lerp(flatVel.normalized, desiredVector, smoothTime);
             }
 
             //HERE DO NOT FORGET OK? OK
