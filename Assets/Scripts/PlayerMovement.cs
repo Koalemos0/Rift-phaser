@@ -36,6 +36,9 @@ public class PlayerMovement : MonoBehaviour
     public float crouchFov;
     public float slideFov;
     public float dashFov;
+    public float groundSlamFov;
+    public float wallrunFov;
+    public float swingFov;
 
     [Header("Calculating velocity")]
     public float calculatedSpeed;
@@ -170,6 +173,7 @@ public class PlayerMovement : MonoBehaviour
         {
             state = MovementState.groundSlam;
             desiredMoveSpeed = 0;
+            cam.DoFov(groundSlamFov, 0.15f);
         }
         // Mode - Freeze
         else if (freeze)
@@ -177,12 +181,14 @@ public class PlayerMovement : MonoBehaviour
             state = MovementState.freeze;
             moveSpeed = 0;
             rb.linearVelocity = Vector3.zero;
+            cam.DoFov(startFov, 0.15f);
         }
         // Mode - Swinging
         else if (swinging)
         {
             state = MovementState.swinging;
             desiredMoveSpeed = swingSpeed;
+            cam.DoFov(swingFov, 0.5f);
         }
         // Mode - Dashing
         else if (dashing)
@@ -198,6 +204,7 @@ public class PlayerMovement : MonoBehaviour
         {
             state = MovementState.wallrunning;
             desiredMoveSpeed = wallRunSpeed;
+            cam.DoFov(wallrunFov, 0.25f);
         }
 
         // Mode - Sliding

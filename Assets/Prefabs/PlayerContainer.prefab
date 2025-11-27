@@ -290,16 +290,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 929575ccff20dc14ca04a99aeec8f082, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 10
-  sprintSpeed: 10
-  slideSpeed: 30
-  wallRunSpeed: 10
-  dashSpeed: 25
-  dashSpeedChangeFactor: 50
-  swingSpeed: 15
+  walkSpeed: 8
+  sprintSpeed: 8
+  slideSpeed: 28
+  wallRunSpeed: 8
+  dashSpeed: 23
+  dashSpeedChangeFactor: 48
+  swingSpeed: 13
   maxYSpeed: 0
-  speedIncreaseMultiplier: 2
-  slopeIncreaseMultiplier: 2
+  speedIncreaseMultiplier: 1.5
+  slopeIncreaseMultiplier: 1.5
   groundDrag: 5
   desiredVector: {x: 0, y: 0, z: 0}
   smoothTime: 3
@@ -308,12 +308,15 @@ MonoBehaviour:
   crouchFov: 85
   slideFov: 95
   dashFov: 100
+  groundSlamFov: 95
+  wallrunFov: 95
+  swingFov: 95
   calculatedSpeed: 0
   jumpForce: 12
   jumpCooldown: 0.25
   airMultiplier: 1
   readyToJump: 0
-  crouchSpeed: 8
+  crouchSpeed: 5
   crouchYScale: 0.5
   jumpKey: 32
   crouchKey: 99
@@ -379,7 +382,7 @@ MonoBehaviour:
   maxWallRunTime: 900
   exitWallTime: 0
   useGravity: 1
-  gravityCounterForce: 30
+  gravityCounterForce: 25
   jumpKey: 32
   upwardsKey: 304
   downwardsKey: 306
@@ -410,7 +413,7 @@ MonoBehaviour:
   climbingUpForce: 14
   climbJumpBackForce: 12
   jumpKey: 32
-  climbJumps: 2
+  climbJumps: 1
   detectionLength: 0.7
   sphereCastRadius: 0.25
   maxWallLookAngle: 35
@@ -432,7 +435,7 @@ MonoBehaviour:
   orientation: {fileID: 5255998395034986725}
   playerCam: {fileID: 4648473548599007942}
   cam: {fileID: 8532859358327614879}
-  dashForce: 15
+  dashForce: 13
   dashUpwardForce: 0
   dashDuration: 0.3
   maxDashYSpeed: 15
@@ -506,7 +509,7 @@ MonoBehaviour:
   playerObj: {fileID: 3847906104637779888}
   slamStrength: 150
   slamWasStarted: 0
-  minDistance: 4
+  minDistance: 5
   slamDelayTime: 0.05
   groundSlamKey: 306
 --- !u!120 &1081085770162131196

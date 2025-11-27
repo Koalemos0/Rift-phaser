@@ -58,12 +58,10 @@ public class Climbing : MonoBehaviour
             {
                 StartClimbing();
             }
-
             //timer 
             if(climbTimer > 0) climbTimer -= Time.deltaTime;
             if (climbTimer <= 0) StopClimbing();
         }
-
         //state 2 - exit wall
         else if (exitingWall)
         {
@@ -72,7 +70,6 @@ public class Climbing : MonoBehaviour
             if(exitWallTimer > 0) exitWallTimer -= Time.deltaTime;
             if (exitWallTimer <= 0) exitingWall = false;
         }
-
         //state 3 - none
         else
         {
@@ -85,7 +82,7 @@ public class Climbing : MonoBehaviour
 
     private void WallCheck()
     {
-        wallFront = Physics.SphereCast(transform.position, sphereCastRadius, orientation.forward, out frontWallHit, detectionLength, whatIsWall);
+        wallFront = Physics.SphereCast(transform.position + new Vector3(0, -1/2, 0), sphereCastRadius, orientation.forward, out frontWallHit, detectionLength, whatIsWall);
         wallLookAngle = Vector3.Angle(orientation.forward, -frontWallHit.normal);
 
         bool newWall = frontWallHit.transform != lastWall || Mathf.Abs(Vector3.Angle(lastWallNormal, frontWallHit.normal)) > minWallNormalAngleChange;
@@ -127,5 +124,4 @@ public class Climbing : MonoBehaviour
 
         climbJumpsLeft--;
     }
-
 }

@@ -27,7 +27,7 @@ public class GroundSlam : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(groundSlamKey) && ReadyToStartGroundSlam())
+        if(Input.GetKeyDown(groundSlamKey) && ReadyToStartGroundSlam() && !pm.groundSlam)
         {
             StartGroundSlam();
         }
