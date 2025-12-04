@@ -290,8 +290,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 929575ccff20dc14ca04a99aeec8f082, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 8
-  sprintSpeed: 8
+  walkSpeed: 10
+  sprintSpeed: 10
   slideSpeed: 28
   wallRunSpeed: 8
   dashSpeed: 23
@@ -338,6 +338,7 @@ MonoBehaviour:
   freeze: 0
   activeGrapple: 0
   groundSlam: 0
+  grappling: 0
 --- !u!114 &7247122758090043669
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -493,7 +494,6 @@ MonoBehaviour:
   overshootYAxis: 0.5
   grapplingCd: 1
   grappleKey: 323
-  grappling: 0
 --- !u!114 &587604493598909662
 MonoBehaviour:
   m_ObjectHideFlags: 0

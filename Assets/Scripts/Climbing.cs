@@ -46,7 +46,7 @@ public class Climbing : MonoBehaviour
         WallCheck();
         StateMachine();
 
-        if (climbing && !exitingWall) ClimbingMovement();
+        if (climbing && !exitingWall && !pm.groundSlam) ClimbingMovement();
     }
 
     private void StateMachine()

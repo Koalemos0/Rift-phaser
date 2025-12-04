@@ -104,6 +104,7 @@ public class PlayerMovement : MonoBehaviour
     public bool freeze;
     public bool activeGrapple;
     public bool groundSlam;
+    public bool grappling;
 
     private void Start()
     {
@@ -143,7 +144,7 @@ public class PlayerMovement : MonoBehaviour
         verticalInput = Input.GetAxisRaw("Vertical");
 
         // when to jump
-        if (Input.GetKey(jumpKey) && readyToJump && grounded)
+        if (Input.GetKey(jumpKey) && readyToJump && grounded && !grappling)
         {
             readyToJump = false;
 

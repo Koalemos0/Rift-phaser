@@ -54,7 +54,7 @@ public class WallRunning : MonoBehaviour
     private void Update()
     {
         CheckForWall();
-        StateMachine();
+        if(!pm.groundSlam) StateMachine();
     }
 
     private void FixedUpdate()

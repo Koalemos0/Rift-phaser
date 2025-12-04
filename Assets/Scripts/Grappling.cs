@@ -25,8 +25,6 @@ public class Grappling : MonoBehaviour
     [Header("Input")]
     public KeyCode grappleKey = KeyCode.Mouse0;
 
-    public bool grappling;
-
     private void Start()
     {
         pm = GetComponent<PlayerMovement>();
@@ -35,7 +33,7 @@ public class Grappling : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(grappleKey)) StartGrapple();
+        if (Input.GetKeyDown(grappleKey) && !pm.groundSlam) StartGrapple();
 
         if(grapplingCdTimer > 0)
         {
@@ -45,7 +43,7 @@ public class Grappling : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (grappling)
+        if (pm.grappling)
         {
             lr.SetPosition(0, gunTip.position);
         }
@@ -57,8 +55,8 @@ public class Grappling : MonoBehaviour
 
         if (sw.predictionHit.point == Vector3.zero) return;
 
-        grappling = true;
-
+        pm.grappling = true;
+        
         pm.freeze = true;
 
         grapplePoint = sw.predictionHit.point;
@@ -89,7 +87,7 @@ public class Grappling : MonoBehaviour
     {
         pm.freeze = false;
 
-        grappling = false;
+        pm.grappling = false;
 
         grapplingCdTimer = grapplingCd;
 

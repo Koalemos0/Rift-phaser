@@ -30,7 +30,7 @@ public class Swinging : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(startStopGrapple))
+        if (Input.GetKeyDown(startStopGrapple) && !pm.groundSlam)
         {
             StartSwing();
         }

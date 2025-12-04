@@ -36,7 +36,7 @@ public class Dashing : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(dashKey))
+        if (Input.GetKeyDown(dashKey) && !pm.groundSlam)
         {
             Dash();
         }
